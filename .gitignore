@@ -4,7 +4,7 @@ __pycache__/
 *.pyc
 
 # Archivos de entorno
-.env
+
 credentials/
 *.json
 

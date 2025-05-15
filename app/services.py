@@ -1,31 +1,40 @@
-# app/services.py
-
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-# Carga variables de entorno desde .env (solo una vez al importar este módulo)
-load_dotenv()
+# Estado global controlado
+GEMINI_READY = False
+model = None
 
-API_KEY = os.getenv("GEMINI_API_KEY")
-if not API_KEY:
-    raise ValueError("No se encontró GEMINI_API_KEY en las variables de entorno.")
-
-# Configuro Gemini con la API key
-genai.configure(api_key=API_KEY)
-model = genai.GenerativeModel("gemini-pro")
+def init_gemini():
+    """Inicialización diferida de Gemini"""
+    global GEMINI_READY, model
+    
+    load_dotenv()  # Solo carga .env cuando se llama
+    
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        print("⚠️ Gemini desactivado: Falta GEMINI_API_KEY")
+        return
+    
+    try:
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel("gemini-pro")
+        GEMINI_READY = True
+        print("✅ Gemini configurado correctamente")
+    except Exception as e:
+        print(f"❌ Error configurando Gemini: {str(e)}")
 
 def get_ai_response(prompt: str) -> str:
-    """
-    Envía el prompt a Gemini y devuelve la respuesta en texto plano.
-    Levanta errores claros en caso de fallas o prompt inválido.
-    """
+    """Versión segura para producción"""
     if not prompt or not prompt.strip():
-        raise ValueError("El prompt no puede estar vacío.")
+        raise ValueError("El prompt no puede estar vacío")
+    
+    if not GEMINI_READY:
+        raise RuntimeError("Servicio Gemini no disponible (configuración faltante o inválida)")
     
     try:
         response = model.generate_content(prompt)
         return response.text
     except Exception as e:
-        # Podés agregar aquí logging si querés
-        raise RuntimeError(f"Error al comunicarse con Gemini: {e}")
+        raise RuntimeError(f"Error en Gemini: {str(e)}")

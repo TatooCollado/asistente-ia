@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Asistente AI con Google Gemini</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <h1>Asistente AI con Google Gemini</h1>
+    <form id="formulario">
+      <textarea id="prompt" class="form-control" placeholder="Escribí tu mensaje..." required></textarea>
+      <button type="submit" class="btn btn-primary mt-3">Enviar</button>
+    </form>
+    <div class="mt-4">
+      <h5>Respuesta:</h5>
+      <div id="respuesta" class="border p-3 bg-light"></div>
+    </div>
+  </div>
+
+  <script>
+    async function fetchRespuesta(prompt) {
+      try {
+        const response = await fetch("/api/preguntar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt })
+        });
+
+        if (!response.ok) {
+          const err = await response.json();
+          return `Error: ${err.error}`;
+        }
+
+        const data = await response.json();
+        return data.respuesta;
+      } catch (err) {
+        return "Error de red o del servidor.";
+      }
+    }
+
+    document.getElementById("formulario").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const input = document.getElementById("prompt");
+      const prompt = input.value.trim();
+      if (!prompt) {
+        alert("Por favor, escribí un mensaje.");
+        return;
+      }
+
+      const respuesta = await fetchRespuesta(prompt);
+      const contenedor = document.getElementById("respuesta");
+
+      contenedor.innerHTML += `<p><strong>Usuario:</strong> ${prompt}</p>`;
+      contenedor.innerHTML += `<p><strong>Asistente:</strong> ${respuesta}</p>`;
+      input.value = "";
+    });
+  </script>
+</body>
+</html>

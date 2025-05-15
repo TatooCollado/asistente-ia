@@ -1,0 +1,19 @@
+# Entornos virtuales
+venv/
+__pycache__/
+*.pyc
+
+# Archivos de entorno
+.env
+credentials/
+*.json
+
+
+# Archivos de configuración del sistema
+.DS_Store
+*.log
+
+# Archivos de instalación
+*.egg-info/
+dist/
+build/

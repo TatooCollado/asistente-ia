@@ -1,4 +1,3 @@
-# app.py
 import os
 from flask import Flask, request, jsonify, render_template
 import google.generativeai as genai
@@ -35,6 +34,7 @@ def preguntar():
     except Exception as e:
         return jsonify({"error": f"Error al comunicarse con Gemini: {str(e)}"}), 500
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+# NO USAR app.run() EN PYTHONANYWHERE
+# if __name__ == "__main__":
+#     port = int(os.environ.get("PORT", 5000))
+#     app.run(host="0.0.0.0", port=port)

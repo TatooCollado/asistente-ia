@@ -1,9 +1,8 @@
 from flask import Flask
-from .routes import main_bp
+import os
 
 def create_app():
-    app = Flask(__name__)
-    app.register_blueprint(main_bp)
+    app = Flask(__name__, template_folder='../templates')  # <-- Ruta relativa
     return app
 
 app = create_app()

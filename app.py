@@ -14,7 +14,7 @@ if not api_key:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel("gemini-2.0-flash")
 
-@app.route("/")  # ✅ ESTA RUTA ES LA CLAVE
+@app.route("/")  
 def home():
     return render_template("index.html")
 
@@ -30,8 +30,6 @@ def preguntar():
     except Exception as e:
         return jsonify({"error": f"Error al comunicarse con Gemini: {str(e)}"}), 500
 
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+
 
 

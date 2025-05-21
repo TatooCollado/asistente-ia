@@ -7,7 +7,7 @@ Permite hacer preguntas en lenguaje natural y obtener respuestas dinámicas.
 
 ```bash
 # 1. Cloná el repositorio
-git clone https://github.com/tu_usuario/asistente-ia.git
+[git clone https://github.com/tu_usuario/asistente-ia.git]
 cd asistente-ia
 
 # 2. Activá el entorno virtual (si lo usás)
